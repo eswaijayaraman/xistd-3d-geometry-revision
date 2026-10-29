@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class 11 3D Geometry Revision & Assessment Hub</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- MathJax for rendering TeX -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- Three.js for 3D visual representations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.5); border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
+
+    <!-- TOP NAVIGATION BAR -->
+    <header class="sticky top-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo & Title -->
+                <div class="flex items-center space-x-3">
+                    <div class="p-2 bg-brand-600 text-white rounded-xl shadow-md">
+                        <i class="fa-solid font-bold fa-cube text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg leading-tight">3D Geometry Hub</h1>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Class 11 CBSE / NCERT Revision & Quiz</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs (Desktop) -->
+                <nav class="hidden md:flex space-x-1 bg-slate-100 dark:bg-slate-700/50 p-1 rounded-xl">
+                    <button onclick="switchTab('revision')" id="tab-revision" class="nav-btn px-4 py-2 text-sm font-medium rounded-lg text-brand-600 dark:text-brand-400 bg-white dark:bg-slate-800 shadow-sm">
+                        <i class="fa-solid fa-book-open mr-2"></i>Key Points & Tools
+                    </button>
+                    <button onclick="switchTab('ncert')" id="tab-ncert" class="nav-btn px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-300 hover:text-brand-600">
+                        <i class="fa-solid fa-square-check mr-2"></i>NCERT Solutions
+                    </button>
+                    <button onclick="switchTab('quiz')" id="tab-quiz" class="nav-btn px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-300 hover:text-brand-600">
+                        <i class="fa-solid fa-pen-ruler mr-2"></i>Interactive Assessment
+                    </button>
+                    <button onclick="switchTab('analytics')" id="tab-analytics" class="nav-btn px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-300 hover:text-brand-600">
+                        <i class="fa-solid fa-chart-line mr-2"></i>Analytics
+                    </button>
+                </nav>
+
+                <!-- Controls -->
+                <div class="flex items-center space-x-2">
+                    <button id="themeToggle" onclick="toggleDarkMode()" class="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg">
+                        <i class="fa-solid fa-moon text-lg dark:hidden"></i>
+                        <i class="fa-solid fa-sun text-lg hidden dark:inline"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Row -->
+        <div class="flex md:hidden border-t border-slate-200 dark:border-slate-700 overflow-x-auto px-2 py-1.5 space-x-1 custom-scrollbar">
+            <button onclick="switchTab('revision')" id="tab-revision-m" class="mobile-nav-btn whitespace-nowrap px-3 py-1.5 text-xs font-medium rounded-lg bg-brand-600 text-white">
+                <i class="fa-solid fa-book-open mr-1"></i> Revision & Tools
+            </button>
+            <button onclick="switchTab('ncert')" id="tab-ncert-m" class="mobile-nav-btn whitespace-nowrap px-3 py-1.5 text-xs font-medium rounded-lg text-slate-600 dark:text-slate-300">
+                <i class="fa-solid fa-square-check mr-1"></i> NCERT
+            </button>
+            <button onclick="switchTab('quiz')" id="tab-quiz-m" class="mobile-nav-btn whitespace-nowrap px-3 py-1.5 text-xs font-medium rounded-lg text-slate-600 dark:text-slate-300">
+                <i class="fa-solid fa-pen-ruler mr-1"></i> Assessment
+            </button>
+            <button onclick="switchTab('analytics')" id="tab-analytics-m" class="mobile-nav-btn whitespace-nowrap px-3 py-1.5 text-xs font-medium rounded-lg text-slate-600 dark:text-slate-300">
+                <i class="fa-solid fa-chart-line mr-1"></i> Analytics
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- SECTION 1: REVISION KEY POINTS & INTERACTIVE TOOLS -->
+        <section id="sec-revision" class="space-y-8">
+            <!-- Hero Banner -->
+            <div class="bg-gradient-to-r from-brand-600 to-indigo-700 text-white rounded-2xl p-6 sm:p-8 shadow-lg relative overflow-hidden">
+                <div class="relative z-10 max-w-2xl">
+                    <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold uppercase tracking-wider mb-3">Quick Mastery</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold mb-2">Introduction to Three-Dimensional Geometry</h2>
+                    <p class="text-brand-100 text-sm sm:text-base mb-4">Master coordinate axes, octants, 3D distances, section ratios, and centroids with interactive formulas and visual tools.</p>
+                </div>
+                <div class="absolute right-4 bottom-2 opacity-15 pointer-events-none text-9xl font-bold">
+                    $\mathbb{R}^3$
+                </div>
+            </div>
+
+            <!-- Grid Layout for Theory Cards and Interactive Tools -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                <!-- Column 1 & 2: Theory Revision Cards -->
+                <div class="lg:col-span-2 space-y-6">
+
+                    <!-- Card 1: Axes, Planes & Coordinates -->
+                    <div class="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <span class="p-2 bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 rounded-lg"><i class="fa-solid fa-arrows-up-down-left-right"></i></span>
+                            <h3 class="text-lg font-bold">1. Axes, Planes & Point Positions</h3>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div class="p-4 bg-slate-50 dark:bg-slate-700/40 rounded-lg border border-slate-100 dark:border-slate-700">
+                                <h4 class="font-semibold text-brand-600 dark:text-brand-400 mb-2">Coordinate Planes</h4>
+                                <ul class="space-y-1.5 text-slate-600 dark:text-slate-300">
+                                    <li>• <strong>$XY$-plane:</strong> $z = 0$, point format $(x, y, 0)$</li>
+                                    <li>• <strong>$YZ$-plane:</strong> $x = 0$, point format $(0, y, z)$</li>
+                                    <li>• <strong>$ZX$-plane:</strong> $y = 0$, point format $(x, 0, z)$</li>
+                                </ul>
+                            </div>
+                            <div class="p-4 bg-slate-50 dark:bg-slate-700/40 rounded-lg border border-slate-100 dark:border-slate-700">
+                                <h4 class="font-semibold text-brand-600 dark:text-brand-400 mb-2">Points on Axes</h4>
+                                <ul class="space-y-1.5 text-slate-600 dark:text-slate-300">
+                                    <li>• <strong>On $X$-axis:</strong> $(x, 0, 0)$</li>
+                                    <li>• <strong>On $Y$-axis:</strong> $(0, y, 0)$</li>
+                                    <li>• <strong>On $Z$-axis:</strong> $(0, 0, z)$</li>
+                                    <li>• <strong>Origin $O$:</strong> $(0, 0, 0)$</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Distance & Perpendicular Distances -->
+                    <div class="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <span class="p-2 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 rounded-lg"><i class="fa-solid fa-ruler-combined"></i></span>
+                            <h3 class="text-lg font-bold">2. Distances in 3D Space</h3>
+                        </div>
+                        <div class="space-y-4 text-sm">
+                            <div class="p-4 bg-slate-50 dark:bg-slate-700/40 rounded-lg">
+                                <p class="font-semibold mb-1">Distance between $P(x_1,y_1,z_1)$ and $Q(x_2,y_2,z_2)$:</p>
+                                <p class="text-center py-2 text-base font-semibold text-brand-700 dark:text-brand-300">
+                                    $$PQ = \sqrt{(x_2-x_1)^2 + (y_2-y_1)^2 + (z_2-z_1)^2}$$
+                                </p>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm">
+                                <div class="p-3 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-900 dark:text-emerald-200 rounded-lg border border-emerald-200 dark:border-emerald-800">
+                                    <p class="font-bold mb-1">Distance of $P(x,y,z)$ from Axes:</p>
+                                    <p>• From $X$-axis: $\sqrt{y^2 + z^2}$</p>
+                                    <p>• From $Y$-axis: $\sqrt{x^2 + z^2}$</p>
+                                    <p>• From $Z$-axis: $\sqrt{x^2 + y^2}$</p>
+                                </div>
+                                <div class="p-3 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-900 dark:text-emerald-200 rounded-lg border border-emerald-200 dark:border-emerald-800">
+                                    <p class="font-bold mb-1">Distance of $P(x,y,z)$ from Planes:</p>
+                                    <p>• From $XY$-plane: $|z|$</p>
+                                    <p>• From $YZ$-plane: $|x|$</p>
+                                    <p>• From $ZX$-plane: $|y|$</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Section Formulae & Centroids -->
+                    <div class="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <span class="p-2 bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 rounded-lg"><i class="fa-solid fa-diagram-project"></i></span>
+                            <h3 class="text-lg font-bold">3. Section Formulae & Centroids</h3>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div class="p-4 bg-slate-50 dark:bg-slate-700/40 rounded-lg">
+                                <h4 class="font-semibold text-purple-600 dark:text-purple-400 mb-1">Section Division ($m:n$)</h4>
+                                <p class="text-xs text-slate-500 mb-2">Dividing line joining $(x_1,y_1,z_1)$ & $(x_2,y_2,z_2)$</p>
+                                <p class="text-xs mb-1"><strong>Internal:</strong> $\left(\frac{mx_2+nx_1}{m+n}, \frac{my_2+ny_1}{m+n}, \frac{mz_2+nz_1}{m+n}\right)$</p>
+                                <p class="text-xs"><strong>External:</strong> $\left(\frac{mx_2-nx_1}{m-n}, \frac{my_2-ny_1}{m-n}, \frac{mz_2-nz_1}{m-n}\right)$</p>
+                            </div>
+                            <div class="p-4 bg-slate-50 dark:bg-slate-700/40 rounded-lg">
+                                <h4 class="font-semibold text-purple-600 dark:text-purple-400 mb-1">Centroids</h4>
+                                <p class="text-xs mb-2"><strong>Triangle Centroid:</strong><br> $G = \left(\frac{x_1+x_2+x_3}{3}, \frac{y_1+y_2+y_3}{3}, \frac{z_1+z_2+z_3}{3}\right)$</p>
+                                <p class="text-xs"><strong>Tetrahedron Centroid:</strong><br> $G = \left(\frac{\sum x_i}{4}, \frac{\sum y_i}{4}, \frac{\sum z_i}{4}\right)$</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Octant Signs Reference Table -->
+                    <div class="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm overflow-x-auto">
+                        <h3 class="text-lg font-bold mb-3 flex items-center">
+                            <i class="fa-solid fa-table-cells mr-2 text-brand-600"></i> Octant Signs Reference
+                        </h3>
+                        <table class="w-full text-xs text-center border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200">
+                                    <th class="p-2 border border-slate-200 dark:border-slate-600">Octant</th>
+                                    <th class="p-2 border border-slate-200 dark:border-slate-600">I</th>
+                                    <th class="p-2 border border-slate-200 dark:border-slate-600">II</th>
+                                    <th class="p-2 border border-slate-200 dark:border-slate-600">III</th>
+                                    <th class="p-2 border border-slate-200 dark:border-slate-600">IV</th>
+                                    <th class="p-2 border border-slate-200 dark:border-slate-600">V</th>
+                                    <th class="p-2 border border-slate-200 dark:border-slate-600">VI</th>
+                                    <th class="p-2 border border-slate-200 dark:border-slate-600">VII</th>
+                                    <th class="p-2 border border-slate-200 dark:border-slate-600">VIII</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="p-2 font-bold border border-slate-200 dark:border-slate-600">x</td>
+                                    <td class="p-2 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 font-bold border border-slate-200 dark:border-slate-600">+</td>
+                                    <td class="p-2 bg-rose-50 dark:bg-rose-950/20 text-rose-600 font-bold border border-slate-200 dark:border-slate-600">-</td>
+                                    <td class="p-2 bg-rose-50 dark:bg-rose-950/20 text-rose-600 font-bold border border-slate-200 dark:border-slate-600">-</td>
+                                    <td class="p-2 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 font-bold border border-slate-200 dark:border-slate-600">+</td>
+                                    <td class="p-2 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 font-bold border border-slate-200 dark:border-slate-600">+</td>
+                                    <td class="p-2 bg-rose-50 dark:bg-rose-950/20 text-rose-600 font-bold border border-slate-200 dark:border-slate-600">-</td>
+                                    <td class="p-2 bg-rose-50 dark:bg-rose-950/20 text-rose-600 font-bold border border-slate-200 dark:border-slate-600">-</td>
+                                    <td class="p-2 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 font-bold border border-slate-200 dark:border-slate-600">+</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2 font-bold border border-slate-200 dark:border-slate-600">y</td>
+                                    <td class="p-2 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 font-bold border border-slate-200 dark:border-slate-600">+</td>
+                                    <td class="p-2 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 font-bold border border-slate-200 dark:border-slate-600">+</td>
+                                    <td class="p-2 bg-rose-50 dark:bg-rose-950/20 text-rose-600 font-bold border border-slate-200 dark:border-slate-600">-</td>
+                                    <td class="p-2 bg-rose-50 dark:bg-rose-950/20 text-rose-600 font-bold border border-slate-200 dark:border-slate-600">-</td>
+                                    <td class="p-2 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 font-bold border border-slate-200 dark:border-slate-600">+</td>
+                                    <td class="p-2 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 font-bold border border-slate-200 dark:border-slate-600">+</td>
+                                    <td class="p-2 bg-rose-50 dark:bg-rose-950/20 text-rose-600 font-bold border border-slate-200 dark:border-slate-600">-</td>
+                                    <td class="p-2 bg-rose-50 dark:bg-rose-950/20 text-rose-600 font-bold border border-slate-200 dark:border-slate-600">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2 font-bold border border-slate-200 dark:border-slate-600">z</td>
+                                    <td class="p-2 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 font-bold border border-slate-200 dark:border-slate-600">+</td>
+                                    <td class="p-2 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 font-bold border border-slate-200 dark:border-slate-600">+</td>
+                                    <td class="p-2 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 font-bold border border-slate-200 dark:border-slate-600">+</td>
+                                    <td class="p-2 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 font-bold border border-slate-200 dark:border-slate-600">+</td>
+                                    <td class="p-2 bg-rose-50 dark:bg-rose-950/20 text-rose-600 font-bold border border-slate-200 dark:border-slate-600">-</td>
+                                    <td class="p-2 bg-rose-50 dark:bg-rose-950/20 text-rose-600 font-bold border border-slate-200 dark:border-slate-600">-</td>
+                                    <td class="p-2 bg-rose-50 dark:bg-rose-950/20 text-rose-600 font-bold border border-slate-200 dark:border-slate-600">-</td>
+                                    <td class="p-2 bg-rose-50 dark:bg-rose-950/20 text-rose-600 font-bold border border-slate-200 dark:border-slate-600">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Column 3: Interactive Tools & Canvas -->
+                <div class="space-y-6">
+
+                    <!-- Interactive Octant & Visualizer Canvas -->
+                    <div class="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <h3 class="text-md font-bold mb-3 flex items-center">
+                            <i class="fa-solid fa-compass text-brand-600 mr-2"></i> Octant Finder & 3D Viewer
+                        </h3>
+                        
+                        <!-- 3D Viewport Canvas Container -->
+                        <div id="canvas-container" class="w-full h-48 bg-slate-900 rounded-lg overflow-hidden relative mb-4">
+                            <canvas id="three-canvas" class="w-full h-full cursor-grab active:cursor-grabbing"></canvas>
+                            <div class="absolute bottom-2 left-2 text-[10px] bg-black/60 text-white px-2 py-1 rounded backdrop-blur-sm pointer-events-none">
+                                Drag mouse to rotate view
+                            </div>
+                        </div>
+
+                        <!-- Octant Finder Form -->
+                        <div class="space-y-3">
+                            <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Input Point Coordinates</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div>
+                                    <span class="text-xs font-bold text-slate-400">X</span>
+                                    <input type="number" id="octant-x" value="3" oninput="calculateOctant()" class="w-full p-2 text-sm border rounded-lg bg-slate-50 dark:bg-slate-700 dark:border-slate-600 focus:ring-2 focus:ring-brand-500 outline-none">
+                                </div>
+                                <div>
+                                    <span class="text-xs font-bold text-slate-400">Y</span>
+                                    <input type="number" id="octant-y" value="-2" oninput="calculateOctant()" class="w-full p-2 text-sm border rounded-lg bg-slate-50 dark:bg-slate-700 dark:border-slate-600 focus:ring-2 focus:ring-brand-500 outline-none">
+                                </div>
+                                <div>
+                                    <span class="text-xs font-bold text-slate-400">Z</span>
+                                    <input type="number" id="octant-z" value="4" oninput="calculateOctant()" class="w-full p-2 text-sm border rounded-lg bg-slate-50 dark:bg-slate-700 dark:border-slate-600 focus:ring-2 focus:ring-brand-500 outline-none">
+                                </div>
+                            </div>
+                            
+                            <div id="octant-result" class="p-3 bg-brand-50 dark:bg-brand-950/40 text-brand-900 dark:text-brand-200 border border-brand-200 dark:border-brand-800 rounded-lg text-sm">
+                                <!-- Computed Result Output -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Calculator Tool: 3D Distance & Midpoint -->
+                    <div class="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <h3 class="text-md font-bold mb-3 flex items-center">
+                            <i class="fa-solid fa-calculator text-emerald-600 mr-2"></i> Distance & Section Calculator
+                        </h3>
+
+                        <div class="space-y-3 text-xs">
+                            <div>
+                                <p class="font-semibold text-slate-600 dark:text-slate-300 mb-1">Point A $(x_1, y_1, z_1)$</p>
+                                <div class="grid grid-cols-3 gap-1.5">
+                                    <input type="number" id="calc-a-x" value="1" class="p-1.5 border rounded bg-slate-50 dark:bg-slate-700 dark:border-slate-600">
+                                    <input type="number" id="calc-a-y" value="-3" class="p-1.5 border rounded bg-slate-50 dark:bg-slate-700 dark:border-slate-600">
+                                    <input type="number" id="calc-a-z" value="4" class="p-1.5 border rounded bg-slate-50 dark:bg-slate-700 dark:border-slate-600">
+                                </div>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-slate-600 dark:text-slate-300 mb-1">Point B $(x_2, y_2, z_2)$</p>
+                                <div class="grid grid-cols-3 gap-1.5">
+                                    <input type="number" id="calc-b-x" value="4" class="p-1.5 border rounded bg-slate-50 dark:bg-slate-700 dark:border-slate-600">
+                                    <input type="number" id="calc-b-y" value="1" class="p-1.5 border rounded bg-slate-50 dark:bg-slate-700 dark:border-slate-600">
+                                    <input type="number" id="calc-b-z" value="-2" class="p-1.5 border rounded bg-slate-50 dark:bg-slate-700 dark:border-slate-600">
+                                </div>
+                            </div>
+
+                            <button onclick="runCalculations()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg shadow transition">
+                                Calculate Geometry Properties
+                            </button>
+
+                            <div id="calc-results" class="space-y-2 pt-2 hidden">
+                                <div class="p-2.5 bg-slate-100 dark:bg-slate-700 rounded-md">
+                                    <span class="text-slate-500 dark:text-slate-400 block text-[11px]">Distance AB</span>
+                                    <span id="res-distance" class="font-bold text-sm text-emerald-600 dark:text-emerald-400">--</span>
+                                </div>
+                                <div class="p-2.5 bg-slate-100 dark:bg-slate-700 rounded-md">
+                                    <span class="text-slate-500 dark:text-slate-400 block text-[11px]">Midpoint M</span>
+                                    <span id="res-midpoint" class="font-bold text-sm">--</span>
+                                </div>
+                                <div class="p-2.5 bg-slate-100 dark:bg-slate-700 rounded-md">
+                                    <span class="text-slate-500 dark:text-slate-400 block text-[11px]">Plane Division Ratios ($AB$)</span>
+                                    <div id="res-ratios" class="text-xs space-y-0.5 mt-1">--</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: NCERT SOLUTIONS PRACTICE MODULE -->
+        <section id="sec-ncert" class="hidden space-y-6">
+            <div class="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-700">
+                    <div>
+                        <h2 class="text-2xl font-bold">NCERT Exercise Solutions</h2>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Class 11 Mathematics Chapter: 3D Geometry</p>
+                    </div>
+                    <!-- Exercise Filter Tabs -->
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="filterNCERT('all')" class="ncert-filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-brand-600 text-white">All</button>
+                        <button onclick="filterNCERT('ex1')" class="ncert-filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300">Ex 11.1 / 12.1</button>
+                        <button onclick="filterNCERT('ex2')" class="ncert-filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300">Ex 11.2 / 12.2</button>
+                        <button onclick="filterNCERT('ex3')" class="ncert-filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300">Ex 11.3 / 12.3</button>
+                        <button onclick="filterNCERT('misc')" class="ncert-filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300">Misc. Ex.</button>
+                    </div>
+                </div>
+
+                <!-- NCERT Problem Cards List -->
+                <div id="ncert-problems-container" class="space-y-4 mt-6">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: DYNAMIC ASSESSMENT & QUIZ GENERATOR -->
+        <section id="sec-quiz" class="hidden space-y-6">
+            <!-- Quiz Configuration Bar -->
+            <div id="quiz-setup-card" class="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
+                <h2 class="text-xl font-bold mb-4 flex items-center">
+                    <i class="fa-solid fa-sliders text-brand-600 mr-2"></i> Customize Assessment Session
+                </h2>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Assessment Mode</label>
+                        <select id="quiz-mode" class="w-full p-2.5 text-sm border rounded-lg bg-slate-50 dark:bg-slate-700 dark:border-slate-600">
+                            <option value="practice">Practice Mode (Instant Feedback & Hints)</option>
+                            <option value="test">Timed Test Mode (Exam Simulation)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Number of Questions</label>
+                        <select id="quiz-count" class="w-full p-2.5 text-sm border rounded-lg bg-slate-50 dark:bg-slate-700 dark:border-slate-600">
+                            <option value="5">5 Questions</option>
+                            <option value="10" selected>10 Questions</option>
+                            <option value="15">15 Questions</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Topic Focus</label>
+                        <select id="quiz-topic" class="w-full p-2.5 text-sm border rounded-lg bg-slate-50 dark:bg-slate-700 dark:border-slate-600">
+                            <option value="all">All Topics (Mixed Standard)</option>
+                            <option value="octants">Octants & Coordinates</option>
+                            <option value="distance">Distance Formula & Perpendiculars</option>
+                            <option value="section">Section Formula & Plane Ratios</option>
+                            <option value="centroid">Centroid & Collinearity</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button onclick="startQuiz()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl shadow-md transition flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-play"></i> <span>Start Test / Practice</span>
+                </button>
+            </div>
+
+            <!-- Active Quiz Interface (Hidden initially) -->
+            <div id="quiz-active-container" class="hidden space-y-6">
+                <!-- Header / Timer Bar -->
+                <div class="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between">
+                    <div>
+                        <span id="quiz-progress-text" class="text-sm font-semibold text-slate-500">Question 1 of 10</span>
+                        <div class="w-32 sm:w-48 bg-slate-200 dark:bg-slate-700 h-2 rounded-full mt-1 overflow-hidden">
+                            <div id="quiz-progress-bar" class="bg-brand-600 h-full transition-all duration-300" style="width: 10%;"></div>
+                        </div>
+                    </div>
+
+                    <div id="quiz-timer-box" class="flex items-center space-x-2 px-3 py-1.5 bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400 rounded-lg text-sm font-bold border border-amber-200 dark:border-amber-800">
+                        <i class="fa-solid fa-stopwatch"></i>
+                        <span id="quiz-timer">00:00</span>
+                    </div>
+
+                    <button onclick="confirmSubmitQuiz()" class="text-xs px-3 py-1.5 bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-300 font-semibold rounded-lg hover:bg-rose-200 transition">
+                        Finish Session
+                    </button>
+                </div>
+
+                <!-- Active Question Box -->
+                <div class="bg-white dark:bg-slate-800 rounded-xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <div class="flex items-start justify-between gap-4 mb-4">
+                        <span id="question-category" class="px-2.5 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-semibold rounded-md">
+                            Octant Identification
+                        </span>
+                    </div>
+
+                    <!-- Question Text -->
+                    <div id="question-text" class="text-lg font-medium mb-6 text-slate-800 dark:text-slate-100 leading-relaxed">
+                        <!-- Dynamic Math Expression -->
+                    </div>
+
+                    <!-- Options Grid -->
+                    <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+                        <!-- Dynamic Option Buttons -->
+                    </div>
+
+                    <!-- Hint & Explanation Panel (Practice Mode) -->
+                    <div id="hint-explanation-box" class="hidden p-4 rounded-xl text-sm border space-y-2">
+                        <!-- Solution detail -->
+                    </div>
+
+                    <!-- Action Controls -->
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-slate-700">
+                        <button id="btn-hint" onclick="toggleQuizHint()" class="text-xs font-semibold text-amber-600 dark:text-amber-400 hover:underline flex items-center space-x-1">
+                            <i class="fa-solid fa-lightbulb"></i> <span>Show Hint</span>
+                        </button>
+
+                        <button id="btn-next-q" onclick="nextQuestion()" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-lg shadow transition">
+                            Next Question <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Result Breakdown View (Hidden initially) -->
+            <div id="quiz-results-card" class="hidden bg-white dark:bg-slate-800 rounded-xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700 shadow-sm text-center space-y-6">
+                <div class="inline-flex p-4 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 rounded-full text-3xl">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold">Assessment Completed!</h2>
+                    <p class="text-slate-500 text-sm">Here is a summary of your performance</p>
+                </div>
+
+                <!-- Stats Badges -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
+                    <div class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
+                        <span class="block text-xs text-slate-400 font-semibold">SCORE</span>
+                        <span id="res-score" class="text-2xl font-bold text-brand-600">8/10</span>
+                    </div>
+                    <div class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
+                        <span class="block text-xs text-slate-400 font-semibold">ACCURACY</span>
+                        <span id="res-accuracy" class="text-2xl font-bold text-emerald-600">80%</span>
+                    </div>
+                    <div class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
+                        <span class="block text-xs text-slate-400 font-semibold">TIME TAKEN</span>
+                        <span id="res-time" class="text-2xl font-bold text-indigo-600">03:45</span>
+                    </div>
+                    <div class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
+                        <span class="block text-xs text-slate-400 font-semibold">RATING</span>
+                        <span id="res-rating" class="text-2xl font-bold text-amber-500">Good</span>
+                    </div>
+                </div>
+
+                <!-- Detailed Question Review -->
+                <div class="text-left max-w-3xl mx-auto space-y-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+                    <h3 class="font-bold text-lg mb-2">Question Breakdown & Solutions</h3>
+                    <div id="review-questions-list" class="space-y-3">
+                        <!-- Dynamic review elements -->
+                    </div>
+                </div>
+
+                <div class="pt-4 flex justify-center space-x-4">
+                    <button onclick="resetQuizToSetup()" class="px-6 py-2.5 bg-brand-600 text-white font-semibold rounded-lg shadow hover:bg-brand-700 transition">
+                        Take Another Quiz
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: PERFORMANCE & ANALYTICS -->
+        <section id="sec-analytics" class="hidden space-y-6">
+            <div class="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
+                <h2 class="text-xl font-bold mb-4 flex items-center">
+                    <i class="fa-solid fa-chart-pie text-brand-600 mr-2"></i> Your Mastery Dashboard
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="p-5 bg-slate-50 dark:bg-slate-700/40 rounded-xl border border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-semibold text-slate-400 uppercase">Tests Completed</p>
+                        <p id="total-tests-count" class="text-3xl font-bold text-slate-800 dark:text-slate-100 mt-1">0</p>
+                    </div>
+                    <div class="p-5 bg-slate-50 dark:bg-slate-700/40 rounded-xl border border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-semibold text-slate-400 uppercase">Average Accuracy</p>
+                        <p id="avg-accuracy-val" class="text-3xl font-bold text-emerald-600 mt-1">0%</p>
+                    </div>
+                    <div class="p-5 bg-slate-50 dark:bg-slate-700/40 rounded-xl border border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-semibold text-slate-400 uppercase">Questions Answered</p>
+                        <p id="total-questions-answered" class="text-3xl font-bold text-indigo-600 mt-1">0</p>
+                    </div>
+                </div>
+
+                <!-- Topic Strengths Bar Chart -->
+                <div class="space-y-4">
+                    <h3 class="font-bold text-md text-slate-700 dark:text-slate-200">Topic-wise Mastery Breakdown</h3>
+                    
+                    <div class="space-y-3 text-sm">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium">Octant Identification</span>
+                                <span id="mastery-octants-pct" class="text-xs font-semibold text-slate-500">100%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                                <div id="mastery-octants-bar" class="bg-brand-500 h-full rounded-full" style="width: 100%;"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium">Distance Formula & Perpendiculars</span>
+                                <span id="mastery-distance-pct" class="text-xs font-semibold text-slate-500">100%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                                <div id="mastery-distance-bar" class="bg-emerald-500 h-full rounded-full" style="width: 100%;"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium">Section Ratios & Division</span>
+                                <span id="mastery-section-pct" class="text-xs font-semibold text-slate-500">100%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                                <div id="mastery-section-bar" class="bg-purple-500 h-full rounded-full" style="width: 100%;"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium">Centroid & Collinearity</span>
+                                <span id="mastery-centroid-pct" class="text-xs font-semibold text-slate-500">100%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                                <div id="mastery-centroid-bar" class="bg-amber-500 h-full rounded-full" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-4 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4">
+            Class 11 Mathematics • 3D Geometry Revision & Assessment Hub • Aligned with NCERT Curriculum
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        /* ----------------------------------------------------
+           1. APP STATE & NAVIGATION
+        ---------------------------------------------------- */
+        let currentTab = 'revision';
+        let analyticsData = JSON.parse(localStorage.getItem('3d_geom_analytics')) || {
+            testsCompleted: 0,
+            totalAnswered: 0,
+            correctCount: 0,
+            topics: { octants: { correct: 0, total: 0 }, distance: { correct: 0, total: 0 }, section: { correct: 0, total: 0 }, centroid: { correct: 0, total: 0 } }
+        };
+
+        function switchTab(tabId) {
+            currentTab = tabId;
+            ['revision', 'ncert', 'quiz', 'analytics'].forEach(t => {
+                const sec = document.getElementById(`sec-${t}`);
+                if (sec) sec.classList.toggle('hidden', t !== tabId);
+
+                // Update tab styles
+                const btn = document.getElementById(`tab-${t}`);
+                if (btn) {
+                    if (t === tabId) {
+                        btn.className = "nav-btn px-4 py-2 text-sm font-medium rounded-lg text-brand-600 dark:text-brand-400 bg-white dark:bg-slate-800 shadow-sm";
+                    } else {
+                        btn.className = "nav-btn px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-300 hover:text-brand-600";
+                    }
+                }
+            });
+
+            if (tabId === 'analytics') updateAnalyticsUI();
+            if (window.MathJax) MathJax.typesetPromise();
+        }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        /* ----------------------------------------------------
+           2. OCTANT CALCULATOR & THREE.JS 3D VISUALIZER
+        ---------------------------------------------------- */
+        let scene, camera, renderer, pointMesh;
+
+        function init3DCanvas() {
+            const container = document.getElementById('canvas-container');
+            if (!container) return;
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0f172a); // dark slate background
+
+            camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(12, 12, 18);
+            camera.lookAt(0, 0, 0);
+
+            renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('three-canvas'), antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+
+            // Add Axes (X: Red, Y: Green, Z: Blue)
+            const axesHelper = new THREE.AxesHelper(8);
+            scene.add(axesHelper);
+
+            // Add Grid
+            const gridHelper = new THREE.GridHelper(16, 16, 0x334155, 0x1e293b);
+            scene.add(gridHelper);
+
+            // Point Mesh
+            const geometry = new THREE.SphereGeometry(0.5, 32, 32);
+            const material = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
+            pointMesh = new THREE.Mesh(geometry, material);
+            scene.add(pointMesh);
+
+            // Mouse Interaction Drag to Rotate
+            let isDragging = false;
+            let prevMousePos = { x: 0, y: 0 };
+
+            const canvas = document.getElementById('three-canvas');
+            canvas.addEventListener('mousedown', e => { isDragging = true; prevMousePos = { x: e.clientX, y: e.clientY }; });
+            canvas.addEventListener('mousemove', e => {
+                if (!isDragging) return;
+                const deltaX = e.clientX - prevMousePos.x;
+                const deltaY = e.clientY - prevMousePos.y;
+                scene.rotation.y += deltaX * 0.01;
+                scene.rotation.x += deltaY * 0.01;
+                prevMousePos = { x: e.clientX, y: e.clientY };
+            });
+            window.addEventListener('mouseup', () => isDragging = false);
+
+            function animate() {
+                requestAnimationFrame(animate);
+                renderer.render(scene, camera);
+            }
+            animate();
+        }
+
+        function calculateOctant() {
+            const x = parseFloat(document.getElementById('octant-x').value) || 0;
+            const y = parseFloat(document.getElementById('octant-y').value) || 0;
+            const z = parseFloat(document.getElementById('octant-z').value) || 0;
+
+            if (pointMesh) {
+                // Three.js coordinates conversion
+                pointMesh.position.set(x, z, y);
+            }
+
+            let octant = "";
+            let reason = "";
+
+            if (x > 0 && y > 0 && z > 0) { octant = "Octant I"; reason = "(+, +, +)"; }
+            else if (x < 0 && y > 0 && z > 0) { octant = "Octant II"; reason = "(-, +, +)"; }
+            else if (x < 0 && y < 0 && z > 0) { octant = "Octant III"; reason = "(-, -, +)"; }
+            else if (x > 0 && y < 0 && z > 0) { octant = "Octant IV"; reason = "(+, -, +)"; }
+            else if (x > 0 && y > 0 && z < 0) { octant = "Octant V"; reason = "(+, +, -)"; }
+            else if (x < 0 && y > 0 && z < 0) { octant = "Octant VI"; reason = "(-, +, -)"; }
+            else if (x < 0 && y < 0 && z < 0) { octant = "Octant VII"; reason = "(-, -, -)"; }
+            else if (x > 0 && y < 0 && z < 0) { octant = "Octant VIII"; reason = "(+, -, -)"; }
+            else { octant = "On Axis / Coordinate Plane"; reason = "Contains 0 coordinate(s)"; }
+
+            const resDiv = document.getElementById('octant-result');
+            resDiv.innerHTML = `Point <strong>(${x}, ${y}, ${z})</strong> belongs to: <br><span class="text-base font-bold text-brand-600 dark:text-brand-400">${octant}</span> <span class="text-xs text-slate-500">Sign pattern: ${reason}</span>`;
+        }
+
+        /* ----------------------------------------------------
+           3. DISTANCE & SECTION CALCULATOR TOOL
+        ---------------------------------------------------- */
+        function runCalculations() {
+            const ax = parseFloat(document.getElementById('calc-a-x').value) || 0;
+            const ay = parseFloat(document.getElementById('calc-a-y').value) || 0;
+            const az = parseFloat(document.getElementById('calc-a-z').value) || 0;
+
+            const bx = parseFloat(document.getElementById('calc-b-x').value) || 0;
+            const by = parseFloat(document.getElementById('calc-b-y').value) || 0;
+            const bz = parseFloat(document.getElementById('calc-b-z').value) || 0;
+
+            // Distance
+            const dist = Math.sqrt(Math.pow(bx - ax, 2) + Math.pow(by - ay, 2) + Math.pow(bz - az, 2)).toFixed(3);
+            
+            // Midpoint
+            const mx = ((ax + bx) / 2).toFixed(2);
+            const my = ((ay + by) / 2).toFixed(2);
+            const mz = ((az + bz) / 2).toFixed(2);
+
+            // Plane Ratios (-z1:z2, -x1:x2, -y1:y2)
+            const xyRatio = az !== 0 && bz !== 0 ? `<b>XY-plane:</b> ${(-az).toFixed(1)} : ${bz.toFixed(1)}` : 'N/A';
+            const yzRatio = ax !== 0 && bx !== 0 ? `<b>YZ-plane:</b> ${(-ax).toFixed(1)} : ${bx.toFixed(1)}` : 'N/A';
+            const zxRatio = ay !== 0 && by !== 0 ? `<b>ZX-plane:</b> ${(-ay).toFixed(1)} : ${by.toFixed(1)}` : 'N/A';
+
+            document.getElementById('res-distance').innerText = `${dist} units`;
+            document.getElementById('res-midpoint').innerText = `(${mx}, ${my}, ${mz})`;
+            document.getElementById('res-ratios').innerHTML = `<div>${xyRatio}</div><div>${yzRatio}</div><div>${zxRatio}</div>`;
+
+            document.getElementById('calc-results').classList.remove('hidden');
+        }
+
+        /* ----------------------------------------------------
+           4. NCERT SOLUTIONS DATA & FUNCTIONS
+        ---------------------------------------------------- */
+        const ncertDatabase = [
+            {
+                id: 1,
+                ex: "ex1",
+                exName: "Exercise 11.1 / 12.1",
+                q: "A point is on the X-axis. What are its y-coordinate and z-coordinates?",
+                sol: "Any point lying on the $X$-axis has both its $y$-coordinate and $z$-coordinate equal to **0**.<br>The general coordinates are of the form $(x, 0, 0)$."
+            },
+            {
+                id: 2,
+                ex: "ex1",
+                exName: "Exercise 11.1 / 12.1",
+                q: "Name the octants in which the following points lie: (i) (1, 2, 3), (ii) (4, -2, 3), (iii) (4, -2, -5), (iv) (-4, 2, -5).",
+                sol: "• **(1, 2, 3):** $(+, +, +) \rightarrow$ **Octant I**<br>• **(4, -2, 3):** $(+, -, +) \rightarrow$ **Octant IV**<br>• **(4, -2, -5):** $(+, -, -) \rightarrow$ **Octant VIII**<br>• **(-4, 2, -5):** $(-, +, -) \rightarrow$ **Octant VI**"
+            },
+            {
+                id: 3,
+                ex: "ex2",
+                exName: "Exercise 11.2 / 12.2",
+                q: "Find the distance between the points $P(1, -3, 4)$ and $Q(-4, 1, 2)$.",
+                sol: "Using distance formula $d = \\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2 + (z_2-z_1)^2}$:<br>$$PQ = \\sqrt{(-4-1)^2 + (1 - (-3))^2 + (2-4)^2}$$<br>$$PQ = \\sqrt{(-5)^2 + (4)^2 + (-2)^2} = \\sqrt{25 + 16 + 4} = \\sqrt{45} = 3\\sqrt{5} \\text{ units}$$"
+            },
+            {
+                id: 4,
+                ex: "ex2",
+                exName: "Exercise 11.2 / 12.2",
+                q: "Show that the points $A(-2, 3, 5)$, $B(1, 2, 3)$ and $C(7, 0, -1)$ are collinear.",
+                sol: "Calculate distances:<br>• $AB = \\sqrt{(1+2)^2 + (2-3)^2 + (3-5)^2} = \\sqrt{9 + 1 + 4} = \\sqrt{14}$<br>• $BC = \\sqrt{(7-1)^2 + (0-2)^2 + (-1-3)^2} = \\sqrt{36 + 4 + 16} = \\sqrt{56} = 2\\sqrt{14}$<br>• $AC = \\sqrt{(7+2)^2 + (0-3)^2 + (-1-5)^2} = \\sqrt{81 + 9 + 36} = \\sqrt{126} = 3\\sqrt{14}$<br><br>Since $AB + BC = \\sqrt{14} + 2\\sqrt{14} = 3\\sqrt{14} = AC$, points $A, B, C$ are **collinear**."
+            },
+            {
+                id: 5,
+                ex: "ex3",
+                exName: "Exercise 11.3 / 12.3",
+                q: "Find the coordinates of the point which divides the line segment joining $(-2, 3, 5)$ and $(1, -4, 6)$ in the ratio $2 : 3$ internally.",
+                sol: "Using internal section formula $(m=2, n=3)$:<br>$$x = \\frac{2(1) + 3(-2)}{2+3} = \\frac{2 - 6}{5} = -\\frac{4}{5}$$<br>$$y = \\frac{2(-4) + 3(3)}{2+3} = \\frac{-8 + 9}{5} = \\frac{1}{5}$$<br>$$z = \\frac{2(6) + 3(5)}{2+3} = \\frac{12 + 15}{5} = \\frac{27}{5}$$<br>Coordinates are **$\\left(-\\frac{4}{5}, \\frac{1}{5}, \\frac{27}{5}\\right)$**."
+            },
+            {
+                id: 6,
+                ex: "misc",
+                exName: "Miscellaneous Exercise",
+                q: "Find the ratio in which the $YZ$-plane divides the line segment formed by joining $P(-2, 4, 7)$ and $Q(3, -5, 8)$.",
+                sol: "Let the $YZ$-plane divide $PQ$ in the ratio $k : 1$.<br>On the $YZ$-plane, the $x$-coordinate is $0$.<br>$$x = \\frac{k(3) + 1(-2)}{k + 1} = 0 \\implies 3k - 2 = 0 \\implies k = \\frac{2}{3}$$<br>Thus, $YZ$-plane divides the line segment internally in the ratio **$2 : 3$**."
+            }
+        ];
+
+        function renderNCERTProblems(filter = 'all') {
+            const container = document.getElementById('ncert-problems-container');
+            container.innerHTML = '';
+
+            const filtered = filter === 'all' ? ncertDatabase : ncertDatabase.filter(item => item.ex === filter);
+
+            filtered.forEach((p, idx) => {
+                const card = document.createElement('div');
+                card.className = "p-5 bg-slate-50 dark:bg-slate-700/30 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3";
+                card.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold px-2.5 py-1 bg-brand-100 dark:bg-brand-900/50 text-brand-700 dark:text-brand-300 rounded-md">${p.exName}</span>
+                        <span class="text-xs text-slate-400">Problem ${idx + 1}</span>
+                    </div>
+                    <p class="font-medium text-sm sm:text-base">${p.q}</p>
+                    <div>
+                        <button onclick="toggleNCERTSolution(${p.id})" class="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline flex items-center space-x-1">
+                            <i class="fa-solid fa-eye"></i> <span id="btn-text-${p.id}">Show Worked Solution</span>
+                        </button>
+                        <div id="sol-box-${p.id}" class="hidden mt-3 p-4 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 text-xs sm:text-sm leading-relaxed text-slate-700 dark:text-slate-200">
+                            ${p.sol}
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            if (window.MathJax) MathJax.typesetPromise();
+        }
+
+        function toggleNCERTSolution(id) {
+            const box = document.getElementById(`sol-box-${id}`);
+            const btnText = document.getElementById(`btn-text-${id}`);
+            if (box.classList.contains('hidden')) {
+                box.classList.remove('hidden');
+                btnText.innerText = 'Hide Solution';
+            } else {
+                box.classList.add('hidden');
+                btnText.innerText = 'Show Worked Solution';
+            }
+        }
+
+        function filterNCERT(filter) {
+            document.querySelectorAll('.ncert-filter-btn').forEach(btn => {
+                btn.className = "ncert-filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300";
+            });
+            event.target.className = "ncert-filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-brand-600 text-white";
+            renderNCERTProblems(filter);
+        }
+
+        /* ----------------------------------------------------
+           5. DYNAMIC QUESTION GENERATOR & ASSESSMENT ENGINE
+        ---------------------------------------------------- */
+        let activeQuizState = {
+            mode: 'practice',
+            questions: [],
+            currentIndex: 0,
+            answers: [],
+            timerInterval: null,
+            timeElapsed: 0
+        };
+
+        function generateRandomQuestions(count, topic) {
+            const questions = [];
+            
+            for (let i = 0; i < count; i++) {
+                let questionType = topic;
+                if (topic === 'all') {
+                    const types = ['octants', 'distance', 'section', 'centroid'];
+                    questionType = types[i % types.length];
+                }
+
+                if (questionType === 'octants') {
+                    const x = (Math.random() < 0.5 ? 1 : -1) * (Math.floor(Math.random() * 8) + 1);
+                    const y = (Math.random() < 0.5 ? 1 : -1) * (Math.floor(Math.random() * 8) + 1);
+                    const z = (Math.random() < 0.5 ? 1 : -1) * (Math.floor(Math.random() * 8) + 1);
+
+                    let correctOctant = "";
+                    if (x > 0 && y > 0 && z > 0) correctOctant = "Octant I";
+                    else if (x < 0 && y > 0 && z > 0) correctOctant = "Octant II";
+                    else if (x < 0 && y < 0 && z > 0) correctOctant = "Octant III";
+                    else if (x > 0 && y < 0 && z > 0) correctOctant = "Octant IV";
+                    else if (x > 0 && y > 0 && z < 0) correctOctant = "Octant V";
+                    else if (x < 0 && y > 0 && z < 0) correctOctant = "Octant VI";
+                    else if (x < 0 && y < 0 && z < 0) correctOctant = "Octant VII";
+                    else if (x > 0 && y < 0 && z < 0) correctOctant = "Octant VIII";
+
+                    const options = ["Octant I", "Octant II", "Octant III", "Octant IV", "Octant V", "Octant VI", "Octant VII", "Octant VIII"];
+                    // Shuffle options ensuring correct one is present
+                    const shuffled = [correctOctant, ...options.filter(o => o !== correctOctant).sort(() => 0.5 - Math.random()).slice(0, 3)].sort(() => 0.5 - Math.random());
+
+                    questions.push({
+                        category: 'Octants',
+                        text: `In which octant does the point $P(${x}, ${y}, ${z})$ lie?`,
+                        options: shuffled,
+                        correct: correctOctant,
+                        hint: `Check the sign pattern $(x, y, z) = (${x > 0 ? '+' : '-'}, ${y > 0 ? '+' : '-'}, ${z > 0 ? '+' : '-'})$.`,
+                        explanation: `Since $x ${x > 0 ? '> 0' : '< 0'}, y ${y > 0 ? '> 0' : '< 0'}, z ${z > 0 ? '> 0' : '< 0'}$, the point lies in **${correctOctant}**.`
+                    });
+
+                } else if (questionType === 'distance') {
+                    // Distance or Perpendicular Distance
+                    if (Math.random() < 0.5) {
+                        // Perpendicular distance
+                        const x = Math.floor(Math.random() * 6) + 1;
+                        const y = Math.floor(Math.random() * 6) + 1;
+                        const z = Math.floor(Math.random() * 6) + 1;
+                        const axis = ['X-axis', 'Y-axis', 'Z-axis'][Math.floor(Math.random() * 3)];
+
+                        let ansVal = 0;
+                        let formula = "";
+                        if (axis === 'X-axis') { ansVal = Math.sqrt(y*y + z*z); formula = `\\sqrt{y^2 + z^2} = \\sqrt{${y}^2 + ${z}^2}`; }
+                        else if (axis === 'Y-axis') { ansVal = Math.sqrt(x*x + z*z); formula = `\\sqrt{x^2 + z^2} = \\sqrt{${x}^2 + ${z}^2}`; }
+                        else { ansVal = Math.sqrt(x*x + y*y); formula = `\\sqrt{x^2 + y^2} = \\sqrt{${x}^2 + ${y}^2}`; }
+
+                        const correctStr = `${ansVal.toFixed(2)} units`;
+                        const wrong1 = `${(ansVal + 1.5).toFixed(2)} units`;
+                        const wrong2 = `${Math.abs(ansVal - 1).toFixed(2)} units`;
+                        const wrong3 = `${(ansVal * 1.2).toFixed(2)} units`;
+
+                        questions.push({
+                            category: 'Distance',
+                            text: `Find the perpendicular distance of the point $P(${x}, ${y}, ${z})$ from the **${axis}**.`,
+                            options: [correctStr, wrong1, wrong2, wrong3].sort(() => 0.5 - Math.random()),
+                            correct: correctStr,
+                            hint: `Distance of $(x, y, z)$ from ${axis} uses perpendicular component coordinates.`,
+                            explanation: `Perpendicular distance from ${axis} is $d = ${formula} = ${correctStr}$.`
+                        });
+                    } else {
+                        // Point to point distance
+                        const p1 = [Math.floor(Math.random()*4), Math.floor(Math.random()*4), Math.floor(Math.random()*4)];
+                        const p2 = [Math.floor(Math.random()*4)+4, Math.floor(Math.random()*4)+4, Math.floor(Math.random()*4)+4];
+                        const distSq = Math.pow(p2[0]-p1[0], 2) + Math.pow(p2[1]-p1[1], 2) + Math.pow(p2[2]-p1[2], 2);
+                        const correctVal = Math.sqrt(distSq).toFixed(2);
+
+                        questions.push({
+                            category: 'Distance',
+                            text: `Find the distance between points $A(${p1.join(', ')})$ and $B(${p2.join(', ')})$.`,
+                            options: [`${correctVal} units`, `${(parseFloat(correctVal)+2).toFixed(2)} units`, `${(parseFloat(correctVal)-1.5).toFixed(2)} units`, `${(parseFloat(correctVal)*1.3).toFixed(2)} units`].sort(() => 0.5 - Math.random()),
+                            correct: `${correctVal} units`,
+                            hint: `Use $d = \\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2 + (z_2-z_1)^2}$.`,
+                            explanation: `$$d = \\sqrt{(${p2[0]}-${p1[0]})^2 + (${p2[1]}-${p1[1]})^2 + (${p2[2]}-${p1[2]})^2} = \\sqrt{${distSq}} = ${correctVal} \\text{ units}$$`
+                        });
+                    }
+
+                } else if (questionType === 'section') {
+                    // Ratio in which plane divides line
+                    const z1 = Math.floor(Math.random() * 5) + 1;
+                    const z2 = -(Math.floor(Math.random() * 5) + 1);
+                    const ratioStr = `${Math.abs(z1)} : ${Math.abs(z2)}`;
+
+                    questions.push({
+                        category: 'Section Formula',
+                        text: `Find the ratio in which the $XY$-plane divides the line segment joining $(2, 3, ${z1})$ and $(4, 1, ${z2})$.`,
+                        options: [`${ratioStr} internally`, `${ratioStr} externally`, `${Math.abs(z2)} : ${Math.abs(z1)} internally`, `1 : 2 internally`].sort(() => 0.5 - Math.random()),
+                        correct: `${ratioStr} internally`,
+                        hint: `Ratio in which $XY$-plane divides segment is $k : 1 = -z_1 : z_2$.`,
+                        explanation: `Since $z$-coordinate on $XY$-plane is $0$, $k = -\\frac{z_1}{z_2} = -\\frac{${z1}}{${z2}} = \\frac{${z1}}{${-z2}}$. Ratio is **${ratioStr} internally**.`
+                    });
+
+                } else {
+                    // Centroid
+                    const x1 = 1, x2 = 3, x3 = 5;
+                    const y1 = 2, y2 = 4, y3 = 6;
+                    const z1 = 3, z2 = 6, z3 = 9;
+
+                    const gx = (x1 + x2 + x3) / 3;
+                    const gy = (y1 + y2 + y3) / 3;
+                    const gz = (z1 + z2 + z3) / 3;
+
+                    const correctAns = `(${gx}, ${gy}, ${gz})`;
+
+                    questions.push({
+                        category: 'Centroid',
+                        text: `Find the centroid of triangle with vertices $A(1, 2, 3)$, $B(3, 4, 6)$, and $C(5, 6, 9)$.`,
+                        options: [correctAns, `(3, 3, 5)`, `(2, 4, 6)`, `(4, 4, 6)`].sort(() => 0.5 - Math.random()),
+                        correct: correctAns,
+                        hint: `Use $G = \\left(\\frac{x_1+x_2+x_3}{3}, \\frac{y_1+y_2+y_3}{3}, \\frac{z_1+z_2+z_3}{3}\\right)$.`,
+                        explanation: `$$G = \\left(\\frac{1+3+5}{3}, \\frac{2+4+6}{3}, \\frac{3+6+9}{3}\\right) = (${gx}, ${gy}, ${gz})$$`
+                    });
+                }
+            }
+            return questions;
+        }
+
+        function startQuiz() {
+            const mode = document.getElementById('quiz-mode').value;
+            const count = parseInt(document.getElementById('quiz-count').value);
+            const topic = document.getElementById('quiz-topic').value;
+
+            activeQuizState = {
+                mode: mode,
+                questions: generateRandomQuestions(count, topic),
+                currentIndex: 0,
+                answers: new Array(count).fill(null),
+                timeElapsed: 0,
+                timerInterval: null
+            };
+
+            document.getElementById('quiz-setup-card').classList.add('hidden');
+            document.getElementById('quiz-results-card').classList.add('hidden');
+            document.getElementById('quiz-active-container').classList.remove('hidden');
+
+            // Timer
+            if (activeQuizState.timerInterval) clearInterval(activeQuizState.timerInterval);
+            activeQuizState.timerInterval = setInterval(() => {
+                activeQuizState.timeElapsed++;
+                const mins = String(Math.floor(activeQuizState.timeElapsed / 60)).padStart(2, '0');
+                const secs = String(activeQuizState.timeElapsed % 60).padStart(2, '0');
+                document.getElementById('quiz-timer').innerText = `${mins}:${secs}`;
+            }, 1000);
+
+            renderCurrentQuestion();
+        }
+
+        function renderCurrentQuestion() {
+            const q = activeQuizState.questions[activeQuizState.currentIndex];
+            const total = activeQuizState.questions.length;
+
+            document.getElementById('quiz-progress-text').innerText = `Question ${activeQuizState.currentIndex + 1} of ${total}`;
+            document.getElementById('quiz-progress-bar').style.width = `${((activeQuizState.currentIndex + 1) / total) * 100}%`;
+
+            document.getElementById('question-category').innerText = q.category;
+            document.getElementById('question-text').innerHTML = q.text;
+
+            // Options
+            const optContainer = document.getElementById('options-container');
+            optContainer.innerHTML = '';
+
+            const selectedAnswer = activeQuizState.answers[activeQuizState.currentIndex];
+
+            q.options.forEach((opt) => {
+                const btn = document.createElement('button');
+                btn.className = `p-4 text-left border rounded-xl font-medium text-sm transition flex items-center justify-between ${
+                    selectedAnswer === opt 
+                        ? 'bg-brand-50 border-brand-500 text-brand-700 dark:bg-brand-950/40 dark:text-brand-300' 
+                        : 'bg-slate-50 dark:bg-slate-700/40 border-slate-200 dark:border-slate-700 hover:border-brand-300'
+                }`;
+                btn.innerHTML = `<span>${opt}</span> <i class="${selectedAnswer === opt ? 'fa-solid fa-circle-check text-brand-600' : 'fa-regular fa-circle text-slate-400'}"></i>`;
+                btn.onclick = () => selectOption(opt);
+                optContainer.appendChild(btn);
+            });
+
+            // Hint & Explanation panel behavior
+            const hintBox = document.getElementById('hint-explanation-box');
+            hintBox.classList.add('hidden');
+
+            if (activeQuizState.mode === 'practice' && selectedAnswer !== null) {
+                hintBox.classList.remove('hidden');
+                const isCorrect = selectedAnswer === q.correct;
+                hintBox.className = `p-4 rounded-xl text-sm border ${isCorrect ? 'bg-emerald-50 text-emerald-900 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-200' : 'bg-rose-50 text-rose-900 border-rose-200 dark:bg-rose-950/30 dark:text-rose-200'}`;
+                hintBox.innerHTML = `
+                    <div class="font-bold mb-1">${isCorrect ? '✓ Correct Answer!' : '✗ Incorrect Answer'}</div>
+                    <div>${q.explanation}</div>
+                `;
+            }
+
+            if (window.MathJax) MathJax.typesetPromise();
+        }
+
+        function selectOption(option) {
+            activeQuizState.answers[activeQuizState.currentIndex] = option;
+            renderCurrentQuestion();
+        }
+
+        function toggleQuizHint() {
+            const q = activeQuizState.questions[activeQuizState.currentIndex];
+            const hintBox = document.getElementById('hint-explanation-box');
+            hintBox.className = "p-4 rounded-xl text-sm border bg-amber-50 text-amber-900 border-amber-200 dark:bg-amber-950/30 dark:text-amber-200";
+            hintBox.innerHTML = `<div class="font-bold mb-1"><i class="fa-solid fa-lightbulb text-amber-500"></i> Hint</div><div>${q.hint}</div>`;
+            hintBox.classList.remove('hidden');
+            if (window.MathJax) MathJax.typesetPromise();
+        }
+
+        function nextQuestion() {
+            if (activeQuizState.currentIndex < activeQuizState.questions.length - 1) {
+                activeQuizState.currentIndex++;
+                renderCurrentQuestion();
+            } else {
+                confirmSubmitQuiz();
+            }
+        }
+
+        function confirmSubmitQuiz() {
+            clearInterval(activeQuizState.timerInterval);
+            
+            // Calculate Results
+            let correctCount = 0;
+            activeQuizState.questions.forEach((q, idx) => {
+                if (activeQuizState.answers[idx] === q.correct) correctCount++;
+            });
+
+            const total = activeQuizState.questions.length;
+            const accuracy = Math.round((correctCount / total) * 100);
+
+            // Display Results
+            document.getElementById('quiz-active-container').classList.add('hidden');
+            document.getElementById('quiz-results-card').classList.remove('hidden');
+
+            document.getElementById('res-score').innerText = `${correctCount}/${total}`;
+            document.getElementById('res-accuracy').innerText = `${accuracy}%`;
+            
+            const mins = String(Math.floor(activeQuizState.timeElapsed / 60)).padStart(2, '0');
+            const secs = String(activeQuizState.timeElapsed % 60).padStart(2, '0');
+            document.getElementById('res-time').innerText = `${mins}:${secs}`;
+
+            document.getElementById('res-rating').innerText = accuracy >= 80 ? 'Excellent' : accuracy >= 50 ? 'Good' : 'Needs Practice';
+
+            // Detailed Review List
+            const reviewContainer = document.getElementById('review-questions-list');
+            reviewContainer.innerHTML = '';
+
+            activeQuizState.questions.forEach((q, idx) => {
+                const userAns = activeQuizState.answers[idx];
+                const isCorrect = userAns === q.correct;
+
+                const item = document.createElement('div');
+                item.className = `p-4 rounded-xl border text-sm text-left ${isCorrect ? 'bg-emerald-50/50 border-emerald-200 dark:bg-emerald-950/20' : 'bg-rose-50/50 border-rose-200 dark:bg-rose-950/20'}`;
+                item.innerHTML = `
+                    <p class="font-semibold text-slate-800 dark:text-slate-100 mb-2">${idx + 1}. ${q.text}</p>
+                    <div class="text-xs space-y-1">
+                        <p><strong>Your Answer:</strong> <span class="${isCorrect ? 'text-emerald-600 font-bold' : 'text-rose-600 font-bold'}">${userAns || 'Not Answered'}</span></p>
+                        ${!isCorrect ? `<p><strong>Correct Answer:</strong> <span class="text-emerald-600 font-bold">${q.correct}</span></p>` : ''}
+                        <div class="mt-2 text-slate-600 dark:text-slate-300 pt-2 border-t border-slate-200 dark:border-slate-700">${q.explanation}</div>
+                    </div>
+                `;
+                reviewContainer.appendChild(item);
+            });
+
+            // Save Analytics
+            saveQuizAnalytics(correctCount, total, activeQuizState.questions, activeQuizState.answers);
+
+            if (window.MathJax) MathJax.typesetPromise();
+        }
+
+        function resetQuizToSetup() {
+            document.getElementById('quiz-results-card').classList.add('hidden');
+            document.getElementById('quiz-setup-card').classList.remove('hidden');
+        }
+
+        /* ----------------------------------------------------
+           6. ANALYTICS MANAGEMENT
+        ---------------------------------------------------- */
+        function saveQuizAnalytics(correct, total, questions, answers) {
+            analyticsData.testsCompleted++;
+            analyticsData.totalAnswered += total;
+            analyticsData.correctCount += correct;
+
+            questions.forEach((q, idx) => {
+                const cat = q.category.toLowerCase();
+                let topicKey = 'octants';
+                if (cat.includes('distance')) topicKey = 'distance';
+                else if (cat.includes('section')) topicKey = 'section';
+                else if (cat.includes('centroid')) topicKey = 'centroid';
+
+                if (analyticsData.topics[topicKey]) {
+                    analyticsData.topics[topicKey].total++;
+                    if (answers[idx] === q.correct) analyticsData.topics[topicKey].correct++;
+                }
+            });
+
+            localStorage.setItem('3d_geom_analytics', JSON.stringify(analyticsData));
+        }
+
+        function updateAnalyticsUI() {
+            document.getElementById('total-tests-count').innerText = analyticsData.testsCompleted;
+            document.getElementById('total-questions-answered').innerText = analyticsData.totalAnswered;
+            
+            const avgAcc = analyticsData.totalAnswered > 0 ? Math.round((analyticsData.correctCount / analyticsData.totalAnswered) * 100) : 0;
+            document.getElementById('avg-accuracy-val').innerText = `${avgAcc}%`;
+
+            // Topic bars
+            Object.keys(analyticsData.topics).forEach(top => {
+                const tData = analyticsData.topics[top];
+                const pct = tData.total > 0 ? Math.round((tData.correct / tData.total) * 100) : 100;
+                
+                const bar = document.getElementById(`mastery-${top}-bar`);
+                const txt = document.getElementById(`mastery-${top}-pct`);
+                if (bar && txt) {
+                    bar.style.width = `${pct}%`;
+                    txt.innerText = `${pct}%`;
+                }
+            });
+        }
+
+        /* ----------------------------------------------------
+           7. INITIALIZATION ON LOAD
+        ---------------------------------------------------- */
+        window.onload = function() {
+            init3DCanvas();
+            calculateOctant();
+            renderNCERTProblems('all');
+        };
+    </script>
+</body>
+</html>
